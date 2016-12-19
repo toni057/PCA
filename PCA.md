@@ -20,14 +20,11 @@ y1 <- rnorm(n, 0, 1)
 x2 <- rnorm(n, 2, 1)
 y2 <- rnorm(n, 2, 1)
 
-
 x <- c(x1, x2)
 y <- c(y1, y2)
 
-
 # combine two groups of data to a single data source
 data <- cbind.data.frame(group = rep(c("1", "2"), each = n), x = x, y = y)
-
 
 # plot the data
 ggplot(data, aes(x = x, y = y, color = group)) + geom_point(size = 2)
@@ -37,11 +34,18 @@ ggplot(data, aes(x = x, y = y, color = group)) + geom_point(size = 2)
 
 ### PCA
 
-A natural step would be to scale (standardize) the data before doing the PCA, but in this case we will omit that step to show the effects better. Scaling is an important step primarily to get all dimensions on the same scale, otherwise the data that is measured in largest units will dominate and the most variance usually lies there. PCA without scaling is usually called covariance PCA, while scaled is called correlation PCA.
+A natural step would be to scale (standardize) the data before doing the PCA, but in this case we will omit that step to show the PCA effects better. Scaling is an important step primarily to get all dimensions on the same scale, otherwise the data that is measured in largest units will dominate and the most variance usually lies there. PCA without scaling is usually called covariance PCA, while scaled is called correlation PCA.
 
-\`\`\`r \# run the PCA pca &lt;- princomp(data\[, -1\], cor = F)
+``` r
+# run the PCA
+pca <- princomp(data[, -1], cor = F)
 
-\# Minus sign included in the x and y axis is due to arbitrary choice of \# direction of the PC coordinate system, and only affects the \# orientation of the axes - included purely for plotting convenience pca*l**o**a**d**i**n**g**s*\[,1\]&lt; − −*p**c**a*loadings\[, 1\] pca*l**o**a**d**i**n**g**s*\[,2\]&lt; − −*p**c**a*loadings\[, 2\] \`\`\`
+# Minus sign included in the x and y axis is due to arbitrary choice of
+# direction of the PC coordinate system, and only affects the
+# orientation of the axes - included purely for plotting convenience
+pca$loadings[, 1] <- -pca$loadings[, 1]
+pca$loadings[, 2] <- -pca$loadings[, 2]
+```
 
 The standard pca outputs are the standard deviations (`pca$sdev`) and the rotation (or the loadings) matrix (`pca$loadings`), which provides a link (a rotation) between the original coordinate system and the PC coordinate system.
 
