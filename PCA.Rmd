@@ -18,7 +18,7 @@ This short paper aims to show the basic ideas of the principal components analys
 We start by generating two dimensional data on which we apply PCA. For convenience we will shape the data as two distinct data clouds and plot it.
 
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 60), tidy = TRUE}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 library(ggplot2)
 
 set.seed(1000)
@@ -51,7 +51,7 @@ A natural step would be to scale (standardize) the data before doing the PCA, bu
 PCA without scaling is usually called covariance PCA, while scaled is called correlation PCA.
 
 
-   ```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 60), tidy = TRUE}
+   ```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 # run the PCA
 pca <- princomp(data[,-1], cor = F)
 
@@ -67,7 +67,7 @@ The standard pca outputs are the standard deviations (`pca$sdev`) and the rotati
 
 The cumulative variance plot can provide us with a quick insight into their distribution.
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 60), tidy = TRUE}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 # plot PC variances
 pca.var <- data.frame(PC = 0:length(pca$sdev), var = c(NA, pca$sdev^2), cumvar = cumsum(c(0, pca$sdev)), cumvar_scaled = cumsum(c(0, pca$sdev)) / sum(c(0, pca$sdev)))
 
@@ -80,7 +80,7 @@ Next we plot the principal components coordinates in the original coordinate sys
 Notice: PCA is a rotation of the original coordinate system into the PC coordinate system and PC points are the representation of original points in the PC coordinate system.
 
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 60), tidy = TRUE}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 ggplot(data, aes(x = x, y = y, color = group)) + 
    geom_point(size = 2) + geom_abline(intercept = 0, slope =  pca$loadings[2,1] / pca$loadings[1,1]) + 
    geom_point(size = 2) + geom_abline(intercept = 0, slope =  pca$loadings[2,2] / pca$loadings[1,2]) + coord_fixed(xlim = c(-2, 3), ylim = c(-1, 3))
@@ -90,7 +90,7 @@ ggplot(data, aes(x = x, y = y, color = group)) +
 After establishing the PC coordinate system we can rotate our original dataset into the PC coordinate system. The plot shows both coordinate system to better illustrate the PCA rotation.
 
 
-```{r fig.align = "center", tidy.opts = list(width.cutoff = 60), tidy = TRUE}
+```{r fig.align = "center", tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 # rotate original data
 x.pca <- as.matrix(data[,-1]) %*% (pca$loadings[,1])
 y.pca <- as.matrix(data[,-1]) %*% (pca$loadings[,2])
@@ -116,7 +116,7 @@ Dimensionality reduction with PCA comes down to projecting the data onto the fir
 
 In this example we only take the first PC and the plots show the effect in the original and the PC coordinate systems.
 
-```{r fig.align = "center", tidy.opts = list(width.cutoff = 60), tidy = TRUE}
+```{r fig.align = "center", tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 newx <- (pca$loadings[1,1]) * (as.matrix(data[,-1]) %*% (pca$loadings[,1]))
 newy <- (pca$loadings[2,1]) * (as.matrix(data[,-1]) %*% (pca$loadings[,1]))
 
@@ -147,7 +147,7 @@ PCA in this setting compellingly reminds of the least squares fitting, and here 
 Although the first PC and least squares line are very similar to each other, the way the lines are fitted are conceptually quite different as shown in the plot.
 
 
-```{r fig.align = "center"}
+```{r fig.align = "center", tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 # calculate the least squares line
 least.squares <- lm(y ~ x)
 
@@ -176,7 +176,7 @@ In order to effectively use and interpret the PCA some additional metrics are ca
 
 Here we will use the Motor Trend Car Road Tests (mtcars) dataset, extracted from the 1974 *Motor Trend* US magazine and comprises of fuel consumption and 10 other characteristics of 32 automobiles (1973-74 models).
 
-```{r}
+```{r, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 
 library(FactoMineR)
 library(factoextra)
@@ -192,7 +192,7 @@ pca.fmr <- PCA(mtcars, scale.unit = T, graph = F)
 
 It is very usefull to plot the original axes and individuals in the PC coordinate system to immediately see their relationship. We can also see where variables lie compared to the principal components and how individuals plot against them.
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 fviz_pca_biplot(pca.fmr, axes = c(1,2))
 ```  
 
@@ -210,7 +210,7 @@ Also, by looking at the individual cars and where they are placed in the PC spac
 Contributions plot is great to visualize how much each of the variables (here engine specifications) contributes to each of the principal components. We can immediately see that the first principal component is almost entirely made up the size of the engine, while the second principal component is mostly made of the speed and acceleration characteristics. This is in alignment with out previous conclusions.
 
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 library(gridExtra)
 grid.arrange(fviz_contrib(pca.fmr, choice = "var", axes = 1),
              fviz_contrib(pca.fmr, choice = "var", axes = 2), ncol = 2)
@@ -223,7 +223,7 @@ grid.arrange(fviz_contrib(pca.fmr, choice = "var", axes = 1),
 It is also beneficial to see how much each of the observations (in this case cars) contributes to each of the principal components. Some major contributors to the first principal component are Honda Civic and Toyota Corola, Lincoln Continental and Cadillac Fleetwood, exactly the cars that define small economic cars and extavagant limousines.
 
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 grid.arrange(fviz_contrib(pca.fmr, choice = "ind", axes = 1),
              fviz_contrib(pca.fmr, choice = "ind", axes = 2), ncol = 2)
 ```  
@@ -234,7 +234,7 @@ grid.arrange(fviz_contrib(pca.fmr, choice = "ind", axes = 1),
 
 The $cos^2$ metric shows the angle distance of the variable to the principal component. The closer a variable to a principal components axis is, the better the principal component represents that variable. The direction can be positive or negative.
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 grid.arrange(fviz_cos2(pca.fmr, choice = "var", axes = 1),
              fviz_cos2(pca.fmr, choice = "var", axes = 2), ncol = 2)
 ```  
@@ -246,7 +246,7 @@ In this example the three crime variables have a high $cos^2$ with the first pri
 
 It is also possible to check the cosine squared distance of each observation (individual) from the principal component. 
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 80), tidy = TRUE}
 grid.arrange(fviz_cos2(pca.fmr, choice = "ind", axes = 1),
              fviz_cos2(pca.fmr, choice = "ind", axes = 2), ncol = 2)
 
