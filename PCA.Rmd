@@ -9,8 +9,7 @@ output:
 
 ## Principal components analysis
 
-This short paper aims to show the basic ideas of the principal components analysis (PCA) in a lightweight manner.
-
+This report aims to show the basic ideas of the principal components analysis (PCA) in a lightweight manner.
 
 
 ### Starting dataset
@@ -25,7 +24,7 @@ set.seed(1000)
 
 n <- 10
 
-x1 <- rnorm(n, 0, 1); y1 <- rnorm(n, 0, 1)
+x1 <- rnorm(n, 0, 1); y1 <- rnorm(n, 0, 1); 
 
 x2 <- rnorm(n, 2, 1); y2 <- rnorm(n, 2, 1)
 
@@ -83,7 +82,7 @@ ggplot(data, aes(x = x, y = y, color = group)) +
 After establishing the PC coordinate system we can rotate our original dataset into the PC coordinate system. The plot shows both coordinate system to better illustrate the PCA rotation.
 
 
-```{r fig.align = "center", tidy.opts = list(width.cutoff = 70), tidy = TRUE}
+```{r, fig.align = "center", tidy.opts = list(width.cutoff = 70), tidy = TRUE}
 # rotate original data
 x.pca <- as.matrix(data[,-1]) %*% (pca$loadings[,1])
 y.pca <- as.matrix(data[,-1]) %*% (pca$loadings[,2])
@@ -109,7 +108,7 @@ Dimensionality reduction with PCA comes down to projecting the data onto the fir
 
 In this example we only take the first PC and the plots show the effect in the original and the PC coordinate systems.
 
-```{r fig.align = "center", tidy.opts = list(width.cutoff = 70), tidy = TRUE}
+```{r, fig.align = "center", tidy.opts = list(width.cutoff = 70), tidy = TRUE}
 newx <- (pca$loadings[1,1]) * (as.matrix(data[,-1]) %*% (pca$loadings[,1]))
 newy <- (pca$loadings[2,1]) * (as.matrix(data[,-1]) %*% (pca$loadings[,1]))
 
@@ -140,7 +139,7 @@ PCA in this setting compellingly reminds of the least squares fitting, and here 
 Although the first PC and least squares line are very similar to each other, the way the lines are fitted are conceptually quite different as shown in the plot.
 
 
-```{r fig.align = "center", tidy.opts = list(width.cutoff = 70), tidy = TRUE}
+```{r, fig.align = "center", tidy.opts = list(width.cutoff = 70), tidy = TRUE}
 # calculate the least squares line
 least.squares <- lm(y ~ x)
 
@@ -242,5 +241,4 @@ It is also possible to check the cosine squared distance of each observation (in
 ```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 70), tidy = TRUE}
 grid.arrange(fviz_cos2(pca.fmr, choice = "ind", axes = 1),
              fviz_cos2(pca.fmr, choice = "ind", axes = 2), ncol = 2)
-
 ```

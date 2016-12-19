@@ -1,7 +1,7 @@
 Principal components analysis
 -----------------------------
 
-This short paper aims to show the basic ideas of the principal components analysis (PCA) in a lightweight manner.
+This report aims to show the basic ideas of the principal components analysis (PCA) in a lightweight manner.
 
 ### Starting dataset
 
