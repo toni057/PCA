@@ -42,7 +42,7 @@ data <- cbind.data.frame(group = rep(c("1", "2"), each = n), x = x, y = y)
 
 # plot the data
 ggplot(data, aes(x = x, y = y, color = group)) + geom_point(size = 2)
-```  
+```
 
 
 ### PCA
@@ -58,7 +58,7 @@ pca <- princomp(data[,-1], cor = F)
 # Minus sign included in the x and y axis is due to arbitrary choice of direction of the PC coordinate system, and only affects the orientation of the axes - included purely for plotting convenience
 pca$loadings[,1] <- -pca$loadings[,1]
 pca$loadings[,2] <- -pca$loadings[,2]
-```  
+```
 
 The standard pca outputs are the standard deviations (`pca$sdev`) and the rotation (or the loadings) matrix (`pca$loadings`), which provides a link (a rotation) between the original coordinate system and the PC coordinate system.
 
@@ -72,7 +72,7 @@ The cumulative variance plot can provide us with a quick insight into their dist
 pca.var <- data.frame(PC = 0:length(pca$sdev), var = c(NA, pca$sdev^2), cumvar = cumsum(c(0, pca$sdev)), cumvar_scaled = cumsum(c(0, pca$sdev)) / sum(c(0, pca$sdev)))
 
 ggplot(pca.var, aes(x = PC, y = cumvar_scaled)) + geom_point(size = 2) + geom_line() + geom_text(aes(label = round(cumvar_scaled, 2)), hjust = 0, vjust = c(-2, 2, 2))
-```  
+```
 
 
 Next we plot the principal components coordinates in the original coordinate system. Principal components are ordered by the size of explained variance and they are always orthogonal.
@@ -84,7 +84,7 @@ Notice: PCA is a rotation of the original coordinate system into the PC coordina
 ggplot(data, aes(x = x, y = y, color = group)) + 
    geom_point(size = 2) + geom_abline(intercept = 0, slope =  pca$loadings[2,1] / pca$loadings[1,1]) + 
    geom_point(size = 2) + geom_abline(intercept = 0, slope =  pca$loadings[2,2] / pca$loadings[1,2]) + coord_fixed(xlim = c(-2, 3), ylim = c(-1, 3))
-```  
+```
 
 
 After establishing the PC coordinate system we can rotate our original dataset into the PC coordinate system. The plot shows both coordinate system to better illustrate the PCA rotation.
@@ -106,7 +106,7 @@ ggplot(data.pca) +
    coord_fixed(xlim = c(-2, 4), ylim = c(-2, 3)) + 
    facet_grid(~dataset) + 
    geom_abline(aes(slope = slope, intercept = intercept), data = data.abline.coord)
-```  
+```
 
 
 #### Dimensionality reduction with PCA
@@ -136,7 +136,7 @@ ggplot(data.pca) +
 # check to see whether points in the original and PC coordinate systems match
 print(sqrt(newx[18]^2 + newy[18]^2))
 print(x.pca[18])
-```  
+```
 
 
 
@@ -165,7 +165,7 @@ ggplot(data.ls) +
    facet_grid(~dataset) + 
    geom_point(aes(x = newx, y = newy, color = group), shape = 7, size = 2) + 
    geom_segment(aes(x = x, y = y, xend = newx, yend = newy, color = group), linetype = 2)
-```  
+```
 
 
 
@@ -185,7 +185,7 @@ data(mtcars)
 head(mtcars)
 
 pca.fmr <- PCA(mtcars, scale.unit = T, graph = F)
-```  
+```
 
 
 #### Biplot
@@ -194,7 +194,7 @@ It is very usefull to plot the original axes and individuals in the PC coordinat
 
 ```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 70), tidy = TRUE}
 fviz_pca_biplot(pca.fmr, axes = c(1,2))
-```  
+```
 
 We can immediately see that the first principal component is positively correlated with the size of the engine (hp, cyl, disp) and negatively correlated with mpg (meaning larger engines consume more fuel).
 
@@ -215,7 +215,7 @@ library(gridExtra)
 grid.arrange(fviz_contrib(pca.fmr, choice = "var", axes = 1),
              fviz_contrib(pca.fmr, choice = "var", axes = 2), ncol = 2)
 
-```  
+```
 
 
 ##### Observation contribution
@@ -226,7 +226,7 @@ It is also beneficial to see how much each of the observations (in this case car
 ```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 70), tidy = TRUE}
 grid.arrange(fviz_contrib(pca.fmr, choice = "ind", axes = 1),
              fviz_contrib(pca.fmr, choice = "ind", axes = 2), ncol = 2)
-```  
+```
 
 #### Cosine squared metric
 
@@ -237,7 +237,7 @@ The $cos^2$ metric shows the angle distance of the variable to the principal com
 ```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 70), tidy = TRUE}
 grid.arrange(fviz_cos2(pca.fmr, choice = "var", axes = 1),
              fviz_cos2(pca.fmr, choice = "var", axes = 2), ncol = 2)
-```  
+```
 
 In this example the three crime variables have a high $cos^2$ with the first principal component which is in alignment with our previous observations. 
 
