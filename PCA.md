@@ -26,7 +26,8 @@ y <- c(y1, y2)
 
 
 # combine two groups of data to a single data source
-data <- cbind.data.frame(group = rep(c("1", "2"), each = n), x = x, y = y)
+data <- cbind.data.frame(group = rep(c("1", "2"), each = n), 
+    x = x, y = y)
 
 
 # plot the data
@@ -39,14 +40,9 @@ ggplot(data, aes(x = x, y = y, color = group)) + geom_point(size = 2)
 
 A natural step would be to scale (standardize) the data before doing the PCA, but in this case we will omit that step to show the effects better. Scaling is an important step primarily to get all dimensions on the same scale, otherwise the data that is measured in largest units will dominate and the most variance usually lies there. PCA without scaling is usually called covariance PCA, while scaled is called correlation PCA.
 
-``` r
-# run the PCA
-pca <- princomp(data[,-1], cor = F)
+\`\`\`r \# run the PCA pca &lt;- princomp(data\[, -1\], cor = F)
 
-# Minus sign included in the x and y axis is due to arbitrary choice of direction of the PC coordinate system, and only affects the orientation of the axes - included purely for plotting convenience
-pca$loadings[,1] <- -pca$loadings[,1]
-pca$loadings[,2] <- -pca$loadings[,2]
-```
+\# Minus sign included in the x and y axis is due to arbitrary \# choice of direction of the PC coordinate system, and only \# affects the orientation of the axes - included purely for \# plotting convenience pca*l**o**a**d**i**n**g**s*\[,1\]&lt; − −*p**c**a*loadings\[, 1\] pca*l**o**a**d**i**n**g**s*\[,2\]&lt; − −*p**c**a*loadings\[, 2\] \`\`\`
 
 The standard pca outputs are the standard deviations (`pca$sdev`) and the rotation (or the loadings) matrix (`pca$loadings`), which provides a link (a rotation) between the original coordinate system and the PC coordinate system.
 
@@ -56,9 +52,13 @@ The cumulative variance plot can provide us with a quick insight into their dist
 
 ``` r
 # plot PC variances
-pca.var <- data.frame(PC = 0:length(pca$sdev), var = c(NA, pca$sdev^2), cumvar = cumsum(c(0, pca$sdev)), cumvar_scaled = cumsum(c(0, pca$sdev)) / sum(c(0, pca$sdev)))
+pca.var <- data.frame(PC = 0:length(pca$sdev), var = c(NA, pca$sdev^2), 
+    cumvar = cumsum(c(0, pca$sdev)), cumvar_scaled = cumsum(c(0, 
+        pca$sdev))/sum(c(0, pca$sdev)))
 
-ggplot(pca.var, aes(x = PC, y = cumvar_scaled)) + geom_point(size = 2) + geom_line() + geom_text(aes(label = round(cumvar_scaled, 2)), hjust = 0, vjust = c(-2, 2, 2))
+ggplot(pca.var, aes(x = PC, y = cumvar_scaled)) + geom_point(size = 2) + 
+    geom_line() + geom_text(aes(label = round(cumvar_scaled, 
+    2)), hjust = 0, vjust = c(-2, 2, 2))
 ```
 
 <img src="PCA_files/figure-markdown_github/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
@@ -68,9 +68,11 @@ Next we plot the principal components coordinates in the original coordinate sys
 Notice: PCA is a rotation of the original coordinate system into the PC coordinate system and PC points are the representation of original points in the PC coordinate system.
 
 ``` r
-ggplot(data, aes(x = x, y = y, color = group)) + 
-   geom_point(size = 2) + geom_abline(intercept = 0, slope =  pca$loadings[2,1] / pca$loadings[1,1]) + 
-   geom_point(size = 2) + geom_abline(intercept = 0, slope =  pca$loadings[2,2] / pca$loadings[1,2]) + coord_fixed(xlim = c(-2, 3), ylim = c(-1, 3))
+ggplot(data, aes(x = x, y = y, color = group)) + geom_point(size = 2) + 
+    geom_abline(intercept = 0, slope = pca$loadings[2, 1]/pca$loadings[1, 
+        1]) + geom_point(size = 2) + geom_abline(intercept = 0, 
+    slope = pca$loadings[2, 2]/pca$loadings[1, 2]) + coord_fixed(xlim = c(-2, 
+    3), ylim = c(-1, 3))
 ```
 
 <img src="PCA_files/figure-markdown_github/unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
@@ -79,20 +81,24 @@ After establishing the PC coordinate system we can rotate our original dataset i
 
 ``` r
 # rotate original data
-x.pca <- as.matrix(data[,-1]) %*% (pca$loadings[,1])
-y.pca <- as.matrix(data[,-1]) %*% (pca$loadings[,2])
+x.pca <- as.matrix(data[, -1]) %*% (pca$loadings[, 1])
+y.pca <- as.matrix(data[, -1]) %*% (pca$loadings[, 2])
 
 # group into a new dataset
-data.pca <- cbind.data.frame(dataset = 'Original coordinate system', data)
-data.pca <- rbind.data.frame(data.pca, data.frame(dataset = 'Rotated coordinate system', group = data$group, x = x.pca, y = y.pca))
+data.pca <- cbind.data.frame(dataset = "Original coordinate system", 
+    data)
+data.pca <- rbind.data.frame(data.pca, data.frame(dataset = "Rotated coordinate system", 
+    group = data$group, x = x.pca, y = y.pca))
 
-data.abline.coord <- data.frame(dataset = rep(c('Original coordinate system', 'Rotated coordinate system'), each = 2), slope = c(pca$loadings[2,1]/pca$loadings[1,1], pca$loadings[2,2]/pca$loadings[1,2], 0, 1e10), intercept = rep(0, 4))
+data.abline.coord <- data.frame(dataset = rep(c("Original coordinate system", 
+    "Rotated coordinate system"), each = 2), slope = c(pca$loadings[2, 
+    1]/pca$loadings[1, 1], pca$loadings[2, 2]/pca$loadings[1, 
+    2], 0, 1e+10), intercept = rep(0, 4))
 
-ggplot(data.pca) +
-   geom_point(aes(x = x, y = y, color = group), size = 2) + 
-   coord_fixed(xlim = c(-2, 4), ylim = c(-2, 3)) + 
-   facet_grid(~dataset) + 
-   geom_abline(aes(slope = slope, intercept = intercept), data = data.abline.coord)
+ggplot(data.pca) + geom_point(aes(x = x, y = y, color = group), 
+    size = 2) + coord_fixed(xlim = c(-2, 4), ylim = c(-2, 3)) + 
+    facet_grid(~dataset) + geom_abline(aes(slope = slope, intercept = intercept), 
+    data = data.abline.coord)
 ```
 
 <img src="PCA_files/figure-markdown_github/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
@@ -104,25 +110,28 @@ Dimensionality reduction with PCA comes down to projecting the data onto the fir
 In this example we only take the first PC and the plots show the effect in the original and the PC coordinate systems.
 
 ``` r
-newx <- (pca$loadings[1,1]) * (as.matrix(data[,-1]) %*% (pca$loadings[,1]))
-newy <- (pca$loadings[2,1]) * (as.matrix(data[,-1]) %*% (pca$loadings[,1]))
+newx <- (pca$loadings[1, 1]) * (as.matrix(data[, -1]) %*% (pca$loadings[, 
+    1]))
+newy <- (pca$loadings[2, 1]) * (as.matrix(data[, -1]) %*% (pca$loadings[, 
+    1]))
 
 # append rotated data
-data.pca <- cbind.data.frame(data.pca, newx = c(newx, x.pca), newy = c(newy, rep(0, 2*n)))
+data.pca <- cbind.data.frame(data.pca, newx = c(newx, x.pca), 
+    newy = c(newy, rep(0, 2 * n)))
 
-ggplot(data.pca) +
-   geom_point(aes(x = x, y = y, color = group), size = 2) + 
-   coord_fixed(xlim = c(-2, 4), ylim = c(-2, 3)) + 
-   facet_grid(~dataset) + 
-   geom_abline(aes(slope = slope, intercept = intercept), data = data.abline.coord) + 
-   geom_point(aes(x = newx, y = newy, color = group), shape = 7, size = 2) + 
-   geom_segment(aes(x = x, y = y, xend = newx, yend = newy, color = group), linetype = 2)
+ggplot(data.pca) + geom_point(aes(x = x, y = y, color = group), 
+    size = 2) + coord_fixed(xlim = c(-2, 4), ylim = c(-2, 3)) + 
+    facet_grid(~dataset) + geom_abline(aes(slope = slope, intercept = intercept), 
+    data = data.abline.coord) + geom_point(aes(x = newx, y = newy, 
+    color = group), shape = 7, size = 2) + geom_segment(aes(x = x, 
+    y = y, xend = newx, yend = newy, color = group), linetype = 2)
 ```
 
 <img src="PCA_files/figure-markdown_github/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 ``` r
-# check to see whether points in the original and PC coordinate systems match
+# check to see whether points in the original and PC
+# coordinate systems match
 print(sqrt(newx[18]^2 + newy[18]^2))
 ```
 
