@@ -51,7 +51,7 @@ A natural step would be to scale (standardize) the data before doing the PCA, bu
 PCA without scaling is usually called covariance PCA, while scaled is called correlation PCA.
 
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 60)}
 # run the PCA
 pca <- princomp(data[,-1], cor = F)
 
@@ -67,7 +67,7 @@ The standard pca outputs are the standard deviations (`pca$sdev`) and the rotati
 
 The cumulative variance plot can provide us with a quick insight into their distribution.
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 60)}
 # plot PC variances
 pca.var <- data.frame(PC = 0:length(pca$sdev), var = c(NA, pca$sdev^2), cumvar = cumsum(c(0, pca$sdev)), cumvar_scaled = cumsum(c(0, pca$sdev)) / sum(c(0, pca$sdev)))
 
