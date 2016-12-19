@@ -2,7 +2,9 @@
 title: "PCA basics"
 author: "Author: tb"
 date: "Date: 4 February 2016"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 ## Principal components analysis
@@ -16,7 +18,7 @@ This short paper aims to show the basic ideas of the principal components analys
 We start by generating two dimensional data on which we apply PCA. For convenience we will shape the data as two distinct data clouds and plot it.
 
 
-```{r, fig.align = "center", fig.height = 4, fig.width = 5}
+```{r, fig.align = "center", fig.height = 4, fig.width = 5, tidy.opts = list(width.cutoff = 60)}
 library(ggplot2)
 
 set.seed(1000)
